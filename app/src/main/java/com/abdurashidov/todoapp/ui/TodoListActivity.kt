@@ -24,6 +24,24 @@ class TodoListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
+
+
+
+            expendibleLv.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+                val intent=Intent(this@TodoListActivity, InfoActivity::class.java)
+                val obj= Gson().toJson(map[groupList[groupPosition]]?.get(childPosition))
+                intent.putExtra("obj", obj)
+                startActivity(intent)
+                true}
+
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        binding.apply {
+
             groupList= ArrayList()
 
             groupList.add("Open")
@@ -36,6 +54,7 @@ class TodoListActivity : AppCompatActivity() {
             val rejectList=ArrayList<Todo>()
             groupList.add("Closed")
             val closedList=ArrayList<Todo>()
+
 
             TodoList.todoList.forEach {
                 when(it.checkboxId.toInt()){
@@ -57,13 +76,7 @@ class TodoListActivity : AppCompatActivity() {
             myExpandibleAdapter= MyExpandibleAdapter(map, groupList)
             expendibleLv.setAdapter(myExpandibleAdapter)
 
-            expendibleLv.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
-                val intent=Intent(this@TodoListActivity, InfoActivity::class.java)
-                val obj= Gson().toJson(map[groupList[groupPosition]]!!.get(childPosition))
-                intent.putExtra("obj", obj)
-                startActivity(intent)
-                true}
-
         }
+
     }
 }

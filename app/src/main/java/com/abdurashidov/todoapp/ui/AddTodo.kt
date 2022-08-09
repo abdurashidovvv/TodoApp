@@ -56,15 +56,13 @@ class AddTodo : AppCompatActivity() {
             }
         }
 
-        val imges=degreeImg.toString()
 
-        val todo=Todo("$name", "$description", "$degree", "$degreeImg", "$createDate", "$deadline", "$checkboxId")
 
         binding.btn1.setOnClickListener {
             if (name.isEmpty() || description.isEmpty() || createDate.isEmpty() || deadline.isEmpty() || degree.isEmpty()){
                 Toast.makeText(this, "Hamma maydonlarni to'ldiring.!", Toast.LENGTH_SHORT).show()
             }else{
-                TodoList.todoList.add(todo)
+                TodoList.todoList.add(Todo("$name", "$description", "$degree", "$degreeImg", "$createDate", "$deadline", "$checkboxId"))
                 finish()
             }
         }

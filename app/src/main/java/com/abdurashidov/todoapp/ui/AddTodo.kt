@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
+import com.abdurashidov.todoapp.Cache.MySharedPreference
 import com.abdurashidov.todoapp.R
 import com.abdurashidov.todoapp.adapters.MySpinnerAdapter
 import com.abdurashidov.todoapp.databinding.ActivityAddTodoBinding
@@ -24,6 +25,7 @@ class AddTodo : AppCompatActivity() {
         setContentView(binding.root)
 
         listSpinner=ArrayList()
+        listSpinner.add(SpinnerItem("To do degree", -1))
         listSpinner.add(SpinnerItem("Urgent", R.drawable.reg_flag))
         listSpinner.add(SpinnerItem("High", R.drawable.yellow_flag))
         listSpinner.add(SpinnerItem("Normal", R.drawable.blue_flag))
@@ -57,12 +59,14 @@ class AddTodo : AppCompatActivity() {
         }
 
 
+        MySharedPreference.init(this)
 
         binding.btn1.setOnClickListener {
-            if (name.isEmpty() || description.isEmpty() || createDate.isEmpty() || deadline.isEmpty() || degree.isEmpty()){
+            if (name.isEmpty() || description.isEmpty() || createDate.isEmpty() || deadline.isEmpty() || degree.isEmpty() || degreeImg==-1){
                 Toast.makeText(this, "Hamma maydonlarni to'ldiring.!", Toast.LENGTH_SHORT).show()
             }else{
                 TodoList.todoList.add(Todo("$name", "$description", "$degree", "$degreeImg", "$createDate", "$deadline", "$checkboxId"))
+                MySharedPreference.obektString=TodoList.todoList
                 finish()
             }
         }

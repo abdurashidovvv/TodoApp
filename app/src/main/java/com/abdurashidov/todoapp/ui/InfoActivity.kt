@@ -1,7 +1,9 @@
 package com.abdurashidov.todoapp.ui
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.abdurashidov.todoapp.Cache.MySharedPreference
 import com.abdurashidov.todoapp.R
 import com.abdurashidov.todoapp.databinding.ActivityInfoBinding
 import com.abdurashidov.todoapp.models.Todo
@@ -22,36 +24,50 @@ class InfoActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onStart() {
         super.onStart()
         binding.apply {
 
-            val obj=intent.getStringExtra("obj")
-            val type=object : TypeToken<Todo>(){}.type
-            val todo=Gson().fromJson<Todo>(obj, type)
-
-            description.text="${description.text} \n ${todo.description}"
-            degreeImg.setImageResource(todo.degreePicture.toInt())
-            degree.text=todo.degree
-            createDate.text="${createDate.text} \n ${todo.createDate}"
-            deadline.text="${deadline.text} \n ${todo.deadline}"
+            MySharedPreference.init(this@InfoActivity)
+            var list=MySharedPreference.obektString
 
 
-            radioGroup.check(todo.checkboxId.toInt()+1)
+            val name=intent.getStringExtra("name")
 
-            TodoList.todoList.remove(todo)
+            var index=-1
 
-            radioGroup.setOnCheckedChangeListener { group, checkedId ->
-                when(checkedId){
-                    1->todo.checkboxId="0"
-                    2->todo.checkboxId="1"
-                    3->todo.checkboxId="2"
-                    4->todo.checkboxId="3"
-                    5->todo.checkboxId="4"
+            for (i in 0 until list.size){
+                if (list[i].name==name){
+                    index=i
+
+                    when(list[index].checkboxId.toInt()){
+                        0->radOpen.isChecked=true
+                        1->radDevelopment.isChecked=true
+                        2->radUploading.isChecked=true
+                        3->radReject.isChecked=true
+                        4->radClosed.isChecked=true
+                    }
+
+                    description.text="${description.text} \n ${list[i].description}"
+                    createDate.text="${createDate.text}: \n ${list[i].createDate}"
+                    deadline.text="${deadline.text}: \n ${list[i].deadline}"
+                    degreeImg.setImageResource(list[i].degreePicture.toInt())
+                    degree.text=list[index].degree
                 }
-                TodoList.todoList.add(todo)
             }
+
             btn1.setOnClickListener {
+                var chIndex=""
+                if(radOpen.isChecked) chIndex="0"
+                if(radDevelopment.isChecked) chIndex="1"
+                if(radUploading.isChecked) chIndex="2"
+                if(radReject.isChecked) chIndex="3"
+                if(radClosed.isChecked) chIndex="4"
+
+                list[index].checkboxId=chIndex
+
+                MySharedPreference.obektString=list
                 finish()
             }
         }

@@ -102,26 +102,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RadioButton
+                android:id="@+id/rad_open"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:text="Open"
                 android:textSize="18sp"/>
             <RadioButton
+                android:id="@+id/rad_development"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:text="Development"
                 android:textSize="18sp"/>
             <RadioButton
+                android:id="@+id/rad_uploading"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:text="Uploading"
                 android:textSize="18sp"/>
             <RadioButton
+                android:id="@+id/rad_reject"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:text="Reject"
                 android:textSize="18sp"/>
             <RadioButton
+                android:id="@+id/rad_closed"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:text="Closed"

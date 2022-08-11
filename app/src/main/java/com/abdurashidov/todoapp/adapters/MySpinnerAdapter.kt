@@ -25,7 +25,9 @@ class MySpinnerAdapter(val list:ArrayList<SpinnerItem>) : BaseAdapter() {
         var itemView:SpinnerItemBinding
         itemView=SpinnerItemBinding.inflate(LayoutInflater.from(parent?.context))
 
-        itemView.spinnerImg.setImageResource(list[position].image)
+        if (list[position].image!=-1){
+            itemView.spinnerImg.setImageResource(list[position].image)
+        }
         itemView.spinnerTv.text=list[position].degree
 
         return itemView.root

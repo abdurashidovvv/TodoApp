@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.abdurashidov.todoapp.Cache.MySharedPreference
 import com.abdurashidov.todoapp.R
 import com.abdurashidov.todoapp.adapters.MyExpandibleAdapter
 import com.abdurashidov.todoapp.databinding.ActivityTodoListBinding
@@ -23,22 +24,10 @@ class TodoListActivity : AppCompatActivity() {
         binding=ActivityTodoListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.apply {
-
-
-
-            expendibleLv.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
-                val intent=Intent(this@TodoListActivity, InfoActivity::class.java)
-                val obj= Gson().toJson(map[groupList[groupPosition]]?.get(childPosition))
-                intent.putExtra("obj", obj)
-                startActivity(intent)
-                true}
-
-        }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         binding.apply {
 
@@ -55,14 +44,17 @@ class TodoListActivity : AppCompatActivity() {
             groupList.add("Closed")
             val closedList=ArrayList<Todo>()
 
+            MySharedPreference.init(this@TodoListActivity)
+            TodoList.todoList=MySharedPreference.obektString
+
 
             TodoList.todoList.forEach {
-                when(it.checkboxId.toInt()){
-                    0->openList.add(it)
-                    1->developmentList.add(it)
-                    2->uploadingList.add(it)
-                    3->rejectList.add(it)
-                    4->closedList.add(it)
+                when(it.checkboxId){
+                    "0"->openList.add(it)
+                    "1"->developmentList.add(it)
+                    "2"->uploadingList.add(it)
+                    "3"->rejectList.add(it)
+                    "4"->closedList.add(it)
                 }
             }
 
@@ -76,6 +68,13 @@ class TodoListActivity : AppCompatActivity() {
             myExpandibleAdapter= MyExpandibleAdapter(map, groupList)
             expendibleLv.setAdapter(myExpandibleAdapter)
 
+
+            val intent=Intent(this@TodoListActivity, InfoActivity::class.java)
+            expendibleLv.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+                intent.putExtra("name", map[groupList[groupPosition]]?.get(childPosition)?.name)
+
+                startActivity(intent)
+                true}
         }
 
     }
